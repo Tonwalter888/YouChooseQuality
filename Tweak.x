@@ -22,20 +22,18 @@ static Scenario GetScenario() {
 static NSString *getClosestQualityLabel(NSArray <MLFormat *> *formats) {
     Scenario scenario = GetScenario();
     int quality = GetQuality(scenario);
-    HBLogDebug(@"YCQ - Quality: %d, Scenario: %d, External: %d", quality, scenario, isExternal);
     int targetResolution = quality / 100;
     int targetFPS = quality % 100;
     int minDiff = INT_MAX;
     NSString *closestQualityLabel = nil;
+    HBLogDebug(@"YCQ - Quality: %d, Scenario: %d, External: %d, Target: Resolution: %d, FPS: %d", quality, scenario, isExternal, targetResolution, targetFPS);
     for (MLFormat *format in formats) {
-        int width = [format width];
-        int height = [format height];
-        int resolution = width > height ? height : width;
+        int resolution = [format singleDimensionResolution];
         int fps = [format FPS];
         int resolutionDiff = abs(resolution - targetResolution);
         int fpsDiff = abs(fps - targetFPS);
         int totalDiff = resolutionDiff + fpsDiff;
-        HBLogDebug(@"YCQ - Available: %@, Resolution: %d, FPS: %d, Diff: %d", [format qualityLabel], resolution, fps, totalDiff);
+        HBLogDebug(@"YCQ - Available: %@, Resolution: %d, FPS: %d, Codec: %d, Diff: %d (Current: %d)", [format qualityLabel], resolution, fps, [[format MIMEType] videoCodec], totalDiff, minDiff);
         if (totalDiff < minDiff) {
             minDiff = totalDiff;
             closestQualityLabel = [format qualityLabel];

@@ -1,5 +1,3 @@
-// Settings
-
 "ENABLED" = "Enabled";
 "TWEAK_DESC" = "YouChooseQuality will select the exact or closest video quality to the one you choose for each scenario.";
 "QUALITY_FOR_SCENARIO_0" = "Video quality for Wi-Fi";
