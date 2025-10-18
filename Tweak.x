@@ -58,8 +58,27 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
 - (void)onSelectableVideoFormats:(NSArray <MLFormat *> *)formats {
     %orig;
     if (!IsEnabled()) return;
+    HBLogDebug(@"YCQ - onSelectableVideoFormats called with itemState: %ld, formats count: %lu", (long)self.itemState, (unsigned long)[formats count]);
     NSString *qualityLabel = getClosestQualityLabel(formats);
-    self.videoFormatConstraint = getConstraint(qualityLabel);
+    MLQuickMenuVideoQualitySettingFormatConstraint *constraint = getConstraint(qualityLabel);
+    self.videoFormatConstraint = constraint;
+    HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
+
+    // For Shorts: if itemState is 0, the constraint won't be applied immediately.
+    // Schedule another application after a delay to ensure it gets applied
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        HBLogDebug(@"YCQ - After 0.1s delay, itemState: %ld", (long)self.itemState);
+        if (self.selectableVideoFormats && [self.selectableVideoFormats count] > 0) {
+            HBLogDebug(@"YCQ - Reapplying constraint after delay for Shorts, itemState: %ld", (long)self.itemState);
+            self.videoFormatConstraint = constraint;
+        }
+    });
+}
+
+- (void)loadWithInitialSeekRequired:(BOOL)required initialSeekTime:(double)time {
+    HBLogDebug(@"YCQ - loadWithInitialSeekRequired called, itemState before: %ld", (long)self.itemState);
+    %orig;
+    HBLogDebug(@"YCQ - loadWithInitialSeekRequired finished, itemState after: %ld", (long)self.itemState);
 }
 
 %end
