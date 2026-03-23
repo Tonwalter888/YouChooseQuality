@@ -65,7 +65,7 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
 
     __weak typeof(self) weakSelf = self;
-    if (self.videoFormatConstraint != nil) {
+    if (self.videoFormatConstraint != 0) {
         if ([weakSelf isKindOfClass:%c(MLHAMPlayerItem)] && weakSelf.selectableVideoFormats && [weakSelf.selectableVideoFormats count] > 0) {
             weakSelf.videoFormatConstraint = constraint;
         }
