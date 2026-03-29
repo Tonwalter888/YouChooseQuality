@@ -61,9 +61,6 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     HBLogDebug(@"YCQ - onSelectableVideoFormats called with itemState: %ld, formats count: %lu", (long)self.itemState, (unsigned long)[formats count]);
     NSString *qualityLabel = getClosestQualityLabel(formats);
     MLQuickMenuVideoQualitySettingFormatConstraint *constraint = getConstraint(qualityLabel);
-    self.videoFormatConstraint = constraint;
-    HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
-
     // For Shorts: if itemState is 0, the constraint won't be applied immediately.
     // Schedule another application after a delay to ensure it gets applied
     __weak typeof(self) weakSelf = self;
@@ -74,6 +71,7 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
             weakSelf.videoFormatConstraint = constraint;
         }
     });
+    HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
 }
 
 %end
