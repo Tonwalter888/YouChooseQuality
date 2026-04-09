@@ -85,6 +85,7 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     %orig;
     if (!IsEnabled()) return;
     NSString *qualityLabel = getClosestQualityLabel(formats);
+    MLQuickMenuVideoQualitySettingFormatConstraint *constraint = getConstraint(qualityLabel);
     // For Shorts: if itemState is 0, the constraint won't be applied immediately.
     // Schedule another application after a delay to ensure it gets applied
     __weak typeof(self) weakSelf = self;
