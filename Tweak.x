@@ -61,15 +61,10 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     HBLogDebug(@"YCQ - onSelectableVideoFormats called with itemState: %ld, formats count: %lu", (long)self.itemState, (unsigned long)[formats count]);
     NSString *qualityLabel = getClosestQualityLabel(formats);
     MLQuickMenuVideoQualitySettingFormatConstraint *constraint = getConstraint(qualityLabel);
-    self.videoFormatConstraint = constraint;
-    HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
-
-    __weak typeof(self) weakSelf = self;
-    if (self.videoFormatConstraint != 0) {
-        if ([weakSelf isKindOfClass:%c(MLHAMPlayerItem)] && weakSelf.selectableVideoFormats && [weakSelf.selectableVideoFormats count] > 0) {
-            weakSelf.videoFormatConstraint = constraint;
-        }
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.videoFormatConstraint = constraint;
+        HBLogDebug(@"YCQ - Set constraint, itemState is now: %ld", (long)self.itemState);
+    });
 }
 
 %end
