@@ -59,7 +59,7 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     %orig;
     if (!IsEnabled()) return;
     NSString *qualityLabel = getClosestQualityLabel(formats);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.videoFormatConstraint = getConstraint(qualityLabel);
     });
 }
@@ -72,7 +72,9 @@ static MLQuickMenuVideoQualitySettingFormatConstraint *getConstraint(NSString *q
     %orig;
     if (!IsEnabled()) return;
     NSString *qualityLabel = getClosestQualityLabel(formats);
-    self.videoFormatConstraint = getConstraint(qualityLabel);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.videoFormatConstraint = getConstraint(qualityLabel);
+    });
 }
 
 %end
